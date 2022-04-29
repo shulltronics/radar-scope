@@ -1,0 +1,3 @@
+[submodule "displayio-universal-ui"]
+	path = displayio-universal-ui
+	url = https://github.com/shulltronics/displayio-universal-ui.git
