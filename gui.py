@@ -1,3 +1,4 @@
+from re import I
 from unigui import UniGui, PygameDisplay
 from unigui import Widget, TextWidget, Solarized
 import adafruit_imageload
@@ -17,17 +18,24 @@ gui = UniGui(WIDTH, HEIGHT, scale=SCALE_FACTOR, colorscheme=CS)
 
 class ImageWidget(Widget):
     """
-    A widget that loads and displays a bmp image
+    A widget that loads and displays a list of bmp images
     """
-    def __init__(self):
+    def __init__(self, paths):
+        self.tilegrids = []
+        for path in paths:
+            self.tilegrids.append(self.__load_image(path))
+        print("number of tilegrids: ", self.tilegrids.__len__())
+        super().__init__("image", 0, 0, 800, 800, colorscheme=CS)
+        self.current_tg_index = 0
+        self.insert(self.current_tg_index, self.tilegrids[self.current_tg_index])
+
+    def __load_image(self, path):
         image, pal = adafruit_imageload.load(
-            "assets/image.bmp",
+            path,
             bitmap=displayio.Bitmap,
             palette=displayio.Palette,
         )
-        super().__init__("image", 0, 0, image.width, image.height, colorscheme=CS)
-        print("palette length: ", pal.__len__())
-        self.tg = displayio.TileGrid(
+        tg = displayio.TileGrid(
             image,
             pixel_shader=pal,
             width=1,
@@ -35,9 +43,25 @@ class ImageWidget(Widget):
             tile_width=800,
             tile_height=800,
         )
-        self.append(self.tg)
+        return tg
 
-i = ImageWidget()
+    def increment_image(self):
+        try:
+            self.pop(self.current_tg_index)
+        except:
+            print("error")
+        self.current_tg_index += 1
+        if self.current_tg_index == 3:
+            self.current_tg_index = 0
+        self.append(self.tilegrids[self.current_tg_index])
+
+    @property
+    def current_index(self):
+        return self.current_tg_index
+
+
+paths = ["assets/image0.bmp", "assets/image1.bmp", "assets/image2.bmp"]
+i = ImageWidget(paths)
 gui.add_widget(i)
 
 # Create our widgets
