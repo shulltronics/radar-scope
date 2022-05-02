@@ -1,1 +1,2 @@
 -e ./displayio-universal-ui
+requests

@@ -21,7 +21,7 @@ class ImageWidget(Widget):
     """
     def __init__(self):
         image, pal = adafruit_imageload.load(
-            "assets/android-screenshot.bmp",
+            "assets/image.bmp",
             bitmap=displayio.Bitmap,
             palette=displayio.Palette,
         )
@@ -41,7 +41,7 @@ i = ImageWidget()
 gui.add_widget(i)
 
 # Create our widgets
-tw = TextWidget("text", 0, 0, WIDTH, HEIGHT, colorscheme=CS)
+tw = TextWidget("text", 0, 0, WIDTH, HEIGHT, colorscheme=CS, font_path=TextWidget.LARGE_FONT)
 tw.set_bg_transparent(True)
 tw.set_value("hello from radar app", h_justification="center", v_justification="top")
 gui.add_widget(tw)
