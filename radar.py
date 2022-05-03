@@ -3,6 +3,8 @@ import time
 import requests
 # import gzip
 from PIL import Image
+import cairosvg
+from io import BytesIO
 
 print("Starting Radar App...")
 
@@ -22,18 +24,34 @@ print("Starting Radar App...")
 # r = requests.get(url0)
 # print("Status code: ", r.status_code)
 
+# print("Parsing SVG to BMP...")
+# svg_stream = BytesIO()
+# cairosvg.svg2png(url="assets/florida.svg", write_to=svg_stream)
+# map = Image.open(svg_stream).convert(mode="P", palette=Image.Palette.ADAPTIVE, colors=8)
+# print("map image is size:(", map.width, ",", map.height, ")")
+# # TODO: make a function from this:
+# x0 = 0
+# y0 = 0
+# x1 = 800
+# y1 = 800
+# map = map.crop((x0, y0, x1, y1))
+# print(map.getpalette()[0:3*8])
+# print("map size: ", map.width, map.height)
+# map.save("assets/florida.bmp", "BMP")
+
 start = time.time()
 dt = 0.3
 while True:
-    display.refresh()
-    click = display.get_mouse_clicks()
-    if click is not None:
-        print(gui.__len__())
-        print("click: " + str(click))
     t = time.time()
     if t - start > dt:
         # This code runs ever dt seconds
+        display.refresh()
+        click = display.get_mouse_clicks()
+        if click is not None:
+            print(gui.__len__())
+        print("click: " + str(click))
         print("elapsed")
         i.increment_image()
-        tw.set_value(str(i.current_index), h_justification="center", v_justification="top")
+        tw.set_value(str(i.current_tg_index), h_justification="center", v_justification="top")
         start = t
+    time.sleep(0.2)
